@@ -1,5 +1,5 @@
-
 <resources>
+
     <style name="Base.Theme.RemindMe" parent="Theme.Material3.Light.NoActionBar">
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
@@ -27,6 +27,10 @@
         <item name="colorSurfaceInverse">@color/md_theme_light_inverseSurface</item>
         <item name="colorOnSurfaceInverse">@color/md_theme_light_inverseOnSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_inversePrimary</item>
+    </style>
+
+    <style name="layoutBackground">
+        <item name="android:background">@color/md_theme_light_background</item>
     </style>
 
     <style name="Theme.RemindMe" parent="Base.Theme.RemindMe" />

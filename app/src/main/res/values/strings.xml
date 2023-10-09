@@ -4,7 +4,6 @@
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
     <string name="previous">Previous</string>
 
     <string name="lorem_ipsum">
@@ -44,4 +43,12 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="add_note">add note</string>
+    <string name="greeting_display_1">Boost your memory</string>
+    <string name="greeting_display_2">Fill out notes</string>
+    <string name="greeting_title_2">Write down the information you want to learn in your notes</string>
+    <string name="greeting_display_3">Using latest research</string>
+    <string name="greeting_title_3">App will remind you to repeat the information at certain intervals</string>
+    <string name="next">Next</string>
+    <string name="lets_remember">Let\'s Remember!</string>
+
 </resources>
