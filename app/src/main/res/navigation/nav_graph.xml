@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/secondFragment"
-        android:name="com.vasyancoder.remindme.ui.fragment.SecondFragment"
+        android:name="com.vasyancoder.remindme.ui.fragment.MainFragment"
         android:label="fragment_second"
-        tools:layout="@layout/fragment_second" />
+        tools:layout="@layout/fragment_main" />
 </navigation>

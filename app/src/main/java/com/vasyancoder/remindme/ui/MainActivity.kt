@@ -11,18 +11,26 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.vasyancoder.remindme.R
 import com.vasyancoder.remindme.databinding.ActivityMainBinding
+import com.vasyancoder.remindme.databinding.DialogAddingNoteBinding
 import com.vasyancoder.remindme.ui.adapter.ViewPagerAdapter
-import com.vasyancoder.remindme.ui.fragment.SecondFragment
+import com.vasyancoder.remindme.ui.fragment.MainFragment
 import com.vasyancoder.remindme.ui.utils.getMeasuredWidthForNewText
+import com.vasyancoder.remindme.ui.viewmodel.NoteItemViewModel
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val viewModel by lazy {
+        ViewModelProvider(this)[NoteItemViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,7 +102,7 @@ class MainActivity : AppCompatActivity() {
                                     android.R.anim.fade_in,
                                     android.R.anim.fade_out,
                                 )
-                                replace(R.id.nav_host_fragment_content_main, SecondFragment())
+                                replace(R.id.nav_host_fragment_content_main, MainFragment())
                             }
                         }
                     }
@@ -104,11 +112,63 @@ class MainActivity : AppCompatActivity() {
         binding.contentMain.viewPager2.adapter = adapter
 
         binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+
+            // TODO: Implement dialog alert
+            // TODO: Create fragment open
+
+            val dialogBinding = DialogAddingNoteBinding.inflate(layoutInflater)
+
+            MaterialAlertDialogBuilder(this@MainActivity)
+                .setTitle(getString(R.string.adding_note))
+                .setView(dialogBinding.root)
+                .setPositiveButton(getString(R.string.add_note)) { _, _ ->
+                    viewModel.addNote(
+                        title = dialogBinding.titleEditText.text.toString(),
+                        contentNote = dialogBinding.contentNoteEditText.text.toString()
+                    )
+                    Snackbar.make(
+                        view,
+                        getString(R.string.note_saved),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+
+//            supportFragmentManager.commit {
+//                setCustomAnimations(
+//                    android.R.anim.fade_in,
+//                    android.R.anim.fade_out,
+//                    android.R.anim.fade_in,
+//                    android.R.anim.fade_out,
+//                )
+//                replace(R.id.nav_host_fragment_content_main, NoteFragment())
+//            }
+
+//            lifecycleScope.launch {
+//                repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                    viewModel.noteIsAdded.collect {
+//                        if (it != null) {
+//                            if (it) {
+//                                Snackbar.make(
+//                                    view,
+//                                    getString(R.string.note_added_successfully),
+//                                    Snackbar.LENGTH_LONG
+//                                ).show()
+//                            } else {
+//                                Snackbar.make(
+//                                    view,
+//                                    getString(R.string.error_adding_note),
+//                                    Snackbar.LENGTH_LONG
+//                                ).show()
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
-
-
     }
 
     private fun animateChangeStateDotsProgressBar(position: Int) {
