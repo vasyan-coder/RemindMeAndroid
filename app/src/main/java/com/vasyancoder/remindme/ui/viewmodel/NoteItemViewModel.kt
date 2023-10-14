@@ -8,13 +8,18 @@ import com.vasyancoder.remindme.data.repository.NoteRepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class NoteItemViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = NoteRepositoryImpl(application)
 
-    val notesList = repository.getNotesList()
+    val notesList = repository.getNotesList().onEach {
+        repository.notesSaveInCache(it)
+    }
+
+    val notesListFromCache = repository.getNotesFromCache()
 
     private val _noteIsAdded = MutableStateFlow<Boolean?>(null)
     val noteIsAdded = _noteIsAdded.asStateFlow()

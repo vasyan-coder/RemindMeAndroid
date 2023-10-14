@@ -1,5 +1,8 @@
 package com.vasyancoder.remindme.ui.fragment
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +17,7 @@ import com.vasyancoder.remindme.databinding.FragmentMainBinding
 import com.vasyancoder.remindme.ui.adapter.NoteListAdapter
 import com.vasyancoder.remindme.ui.viewmodel.NoteItemViewModel
 import kotlinx.coroutines.launch
+
 
 class MainFragment : Fragment() {
 
@@ -39,17 +43,44 @@ class MainFragment : Fragment() {
         val adapter = NoteListAdapter()
         binding.notesList.adapter = adapter
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.notesList.collect {
-                    adapter.submitList(it)
+        val connectivityManager =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (connectivityManager.isDefaultNetworkActive) {
+            connectivityManager.registerDefaultNetworkCallback(object :
+                ConnectivityManager.NetworkCallback() {
+                override fun onAvailable(network: Network) {
+                    lifecycleScope.launch {
+                        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                            viewModel.notesList.collect {
+                                adapter.submitList(it)
+                            }
+                        }
+                    }
+                }
+
+                override fun onLost(network: Network) {
+                    lifecycleScope.launch {
+                        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                            viewModel.notesListFromCache.collect {
+                                adapter.submitList(it)
+                            }
+                        }
+                    }
+                }
+            })
+        } else {
+            lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.notesListFromCache.collect {
+                        adapter.submitList(it)
+                    }
                 }
             }
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
     }
 }
