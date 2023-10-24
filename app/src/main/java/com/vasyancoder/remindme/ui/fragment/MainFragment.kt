@@ -13,10 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.vasyancoder.remindme.NoteApp
 import com.vasyancoder.remindme.databinding.FragmentMainBinding
 import com.vasyancoder.remindme.ui.adapter.NoteListAdapter
 import com.vasyancoder.remindme.ui.viewmodel.NoteItemViewModel
+import com.vasyancoder.remindme.ui.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 class MainFragment : Fragment() {
@@ -24,8 +27,20 @@ class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     private val viewModel by lazy {
-        ViewModelProvider(this)[NoteItemViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory)[NoteItemViewModel::class.java]
+    }
+
+    private val component by lazy {
+        (requireActivity().application as NoteApp).component
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        component.inject(this)
     }
 
     override fun onCreateView(

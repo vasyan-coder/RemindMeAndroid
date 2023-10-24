@@ -1,11 +1,11 @@
 package com.vasyancoder.remindme.data.repository
 
 import android.content.Context
-import com.vasyancoder.remindme.data.database.NoteRoomDatabase
+import com.vasyancoder.remindme.data.database.dao.NoteDao
 import com.vasyancoder.remindme.data.mapper.toNote
 import com.vasyancoder.remindme.data.mapper.toNoteDbModel
 import com.vasyancoder.remindme.data.model.Note
-import com.vasyancoder.remindme.data.network.retrofit.ApiFactory
+import com.vasyancoder.remindme.data.network.retrofit.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -13,17 +13,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NoteRepositoryImpl(
-    private val context: Context
+class NoteRepositoryImpl @Inject constructor(
+    private val context: Context,
+    private val apiService: ApiService,
+    private val noteDao: NoteDao
 ) {
 
-    private val apiService = ApiFactory.apiService
     private val dispatcherIO = Dispatchers.IO
-    private val noteDao by lazy {
-        val db: NoteRoomDatabase = NoteRoomDatabase.getDatabase(context)
-        db.noteDao()
-    }
 
     fun getNotesList(): Flow<List<Note>> = flow {
         while (true) {

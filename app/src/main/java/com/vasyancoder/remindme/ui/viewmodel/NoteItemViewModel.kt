@@ -1,7 +1,6 @@
 package com.vasyancoder.remindme.ui.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vasyancoder.remindme.data.model.Note
 import com.vasyancoder.remindme.data.repository.NoteRepositoryImpl
@@ -10,10 +9,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NoteItemViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository = NoteRepositoryImpl(application)
+class NoteItemViewModel @Inject constructor(
+    private val repository: NoteRepositoryImpl
+) : ViewModel() {
 
     val notesList = repository.getNotesList().onEach {
         repository.notesSaveInCache(it)

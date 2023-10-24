@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.vasyancoder.remindme.NoteApp
 import com.vasyancoder.remindme.R
 import com.vasyancoder.remindme.databinding.ActivityMainBinding
 import com.vasyancoder.remindme.databinding.DialogAddingNoteBinding
@@ -22,17 +23,27 @@ import com.vasyancoder.remindme.ui.adapter.ViewPagerAdapter
 import com.vasyancoder.remindme.ui.fragment.MainFragment
 import com.vasyancoder.remindme.ui.utils.getMeasuredWidthForNewText
 import com.vasyancoder.remindme.ui.viewmodel.NoteItemViewModel
+import com.vasyancoder.remindme.ui.viewmodel.ViewModelFactory
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     private val viewModel by lazy {
         ViewModelProvider(this)[NoteItemViewModel::class.java]
     }
 
+    private val component by lazy {
+        (application as NoteApp).component
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
