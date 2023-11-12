@@ -60,4 +60,7 @@ dependencies {
 
     implementation("com.google.dagger:dagger:2.47")
     ksp("com.google.dagger:dagger-compiler:2.47")
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
 }

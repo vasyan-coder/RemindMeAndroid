@@ -1,6 +1,7 @@
 package com.vasyancoder.remindme.data.repository
 
 import android.content.Context
+import android.graphics.Bitmap
 import com.vasyancoder.remindme.data.database.dao.NoteDao
 import com.vasyancoder.remindme.data.mapper.toNote
 import com.vasyancoder.remindme.data.mapper.toNoteDbModel
@@ -13,6 +14,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import javax.inject.Inject
 
 class NoteRepositoryImpl @Inject constructor(
@@ -50,6 +54,19 @@ class NoteRepositoryImpl @Inject constructor(
 
     fun getNotesFromCache(): Flow<List<Note>> {
         return noteDao.getAllNotes().map { notes -> notes.map { it.toNote() } }
+    }
+
+    fun saveImage(bitmap: Bitmap) {
+        val imagesFolder = File(context.cacheDir, "images")
+        try {
+            imagesFolder.mkdirs()
+            val file = File(imagesFolder, "test")
+            val stream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+            stream.flush()
+            stream.close()
+        } catch (_: IOException) {
+        }
     }
 
     companion object {

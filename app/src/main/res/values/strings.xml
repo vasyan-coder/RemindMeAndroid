@@ -59,5 +59,9 @@
     <string name="your_note">Your note...</string>
     <string name="note_saved">Note saved</string>
     <string name="cancel">Cancel</string>
+    <string name="profile_image">profile image</string>
+    <string name="link_to_image">Link to image</string>
+    <string name="profile">Profile</string>
+    <string name="load">Load</string>
 
 </resources>

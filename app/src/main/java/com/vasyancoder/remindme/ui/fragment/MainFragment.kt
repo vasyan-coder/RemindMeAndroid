@@ -8,12 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vasyancoder.remindme.NoteApp
+import com.vasyancoder.remindme.R
 import com.vasyancoder.remindme.databinding.FragmentMainBinding
 import com.vasyancoder.remindme.ui.adapter.NoteListAdapter
 import com.vasyancoder.remindme.ui.viewmodel.NoteItemViewModel
@@ -53,6 +55,18 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.profileBtn.setOnClickListener {
+            parentFragmentManager.commit {
+                setCustomAnimations(
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out,
+                    android.R.anim.fade_in,
+                    android.R.anim.fade_out,
+                )
+                replace(R.id.nav_host_fragment_content_main, ProfileFragment())
+            }
+        }
 
         binding.notesList.layoutManager = LinearLayoutManager(requireContext())
         val adapter = NoteListAdapter()
